@@ -1,6 +1,5 @@
 package main
 
-//Credit: https://github.com/rrrCode9/gRPC-Bidirectional-Streaming-ChatServer/blob/main/client.go
 import (
 	"fmt"
 	Handin5 "grpcChatServer/chatserver"
@@ -15,10 +14,6 @@ func main() {
 
 	f := setLog()
 	defer f.Close()
-	//arg1, _ := strconv.ParseInt(os.Args[1], 10, 32)
-	//Port := int32(arg1) + 5000
-
-	cs := Handin5.ChatServer{}
 
 	for i := 0; i < 3; i++ {
 		Port := i + 5000
@@ -29,35 +24,24 @@ func main() {
 		}
 		log.Println("Listening @ : ", fmt.Sprintf(":%v", Port))
 
+		cs := Handin5.ChatServer{}
+
 		grpcserver := grpc.NewServer()
 
 		Handin5.RegisterServicesServer(grpcserver, &cs)
 
-		err = grpcserver.Serve(listen)
-		if err != nil {
-			log.Fatalf("Failed to start gRPC server :: %v", err)
-		}
+		go startServing(grpcserver, listen)
 	}
+	cha := make(chan bool)
+	<-cha
+}
 
-	/*listen, err := net.Listen("tcp", fmt.Sprintf(":%v", Port))
-	if err != nil {
-		log.Fatalf("Could not listen on @ %v :: %v", Port, err)
-	}
-	log.Println("Listening @ : ", fmt.Sprintf(":%v", Port))*/
+func startServing(grpcserver *grpc.Server, listen net.Listener) {
 
-	//grpcserver1 := grpc.NewServer()
-	//grpcserver1 := grpc.NewServer()
-	//grpcserver1 := grpc.NewServer()
-
-	//cs := Videobranch.ChatServer{}
-	//Videobranch.RegisterServicesServer(grpcserver, &cs)
-	//Videobranch.RegisterServicesServer(grpcserver, &cs)
-	//Videobranch.RegisterServicesServer(grpcserver, &cs)
-
-	/*err = grpcserver.Serve(listen)
+	err := grpcserver.Serve(listen)
 	if err != nil {
 		log.Fatalf("Failed to start gRPC server :: %v", err)
-	}*/
+	}
 
 }
 

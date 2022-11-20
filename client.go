@@ -1,6 +1,5 @@
 package main
 
-//Credit: https://github.com/rrrCode9/gRPC-Bidirectional-Streaming-ChatServer/blob/main/client.go
 import (
 	"bufio"
 	"context"
@@ -16,7 +15,7 @@ import (
 
 func main() {
 
-	fmt.Println("--- Enter a Username to Join Chat ---")
+	fmt.Println("--- Enter a Username ---")
 	fmt.Printf("Your Name : ")
 	reader := bufio.NewReader(os.Stdin)
 	input, err := reader.ReadString('\n')
@@ -29,7 +28,7 @@ func main() {
 		temp := "localhost:"
 		serverID := temp + strconv.Itoa(5000+i)
 		log.Println("Connecting : " + serverID)
-		conn, err := grpc.Dial(serverID, grpc.WithInsecure()) //de forsk. servere
+		conn, err := grpc.Dial(serverID, grpc.WithInsecure())
 
 		if err != nil {
 			log.Fatalf("Failed to connect to gRPC server :: %v", err)
@@ -40,20 +39,15 @@ func main() {
 		servers = append(servers, client)
 	}
 
-	//stream, err := client.ChatService(context.Background())
-	if err != nil {
-		log.Fatalf("Failed to call ChatService :: %v", err)
-	}
-
 	reader2 := bufio.NewReader(os.Stdin)
-	fmt.Printf("WRITE UNIQUE ID PLS ;-;")
+	fmt.Println("WRITE UNIQUE ID PLS ;-;")
 	input2, err := reader2.ReadString('\n')
 	if err != nil {
 		log.Printf("Failed to read from console :: %v", err)
 	}
 
 	clientId, err := strconv.Atoi(input2)
-	ch := clienthandle{clientName: clientNameInput, servers: servers, clientId: int32(clientId)}
+	ch := clienthandle{clientName: clientNameInput, serversList: servers, clientId: clientId}
 
 	go ch.Terminal()
 	bl := make(chan bool)
@@ -61,17 +55,16 @@ func main() {
 }
 
 type clienthandle struct {
-	clientId   int32
-	clientName string
-	servers    []Handin5.ServicesClient
-	lamport    int32
-	ctx        context.Context
+	clientId    int
+	clientName  string
+	serversList []Handin5.ServicesClient
+	//ctx         context.Context
 }
 
 func (ch *clienthandle) Terminal() {
 
 	for {
-		fmt.Printf("Write either 1 for bid or 2 for Request")
+		fmt.Println("Write 'Bid' to create a bid, or 'Result' to see current highest bid")
 
 		reader := bufio.NewReader(os.Stdin)
 
@@ -79,99 +72,45 @@ func (ch *clienthandle) Terminal() {
 		if err != nil {
 			log.Fatalf(" Failed to read from console :: %v", err)
 		}
-		fmt.Printf(clientMessage)
-		command, err := strconv.Atoi(clientMessage)
-		if command == 1 {
-			fmt.Printf("HEWWO")
-			ch.BidMoney()
-		} else if command == 2 {
-			//ch.Request()
+
+		input := strings.Trim(clientMessage, "\r\n")
+		if input == "Bid" {
+			fmt.Println("Write your bid:")
+
+			clientBid, err := reader.ReadString('\n')
+			inputBid := strings.Trim(clientBid, "\r\n")
+			if err != nil {
+				log.Fatalf(" Failed to read from console :: %v", err)
+			}
+
+			bid, err := strconv.Atoi(inputBid)
+			for _, element := range ch.serversList {
+				bidMessage := &Handin5.BidMessage{ClientID: int64(ch.clientId), Bid: int64(bid)}
+				ack, err := element.Bid(context.Background(), bidMessage)
+				if err != nil {
+					log.Fatalf(" Bid Failed %v", err)
+				}
+				log.Println(ack.Response)
+
+				/*NOTES:
+				Calling this with a bid that gets accepted, results in 1 response "success" and 2 of "Fail".
+				I aktiv replik. skal hver server modtage og processe de samme requests fra clients i samme rækkefølge.
+				Kan vi antage et dette betyder, at de alle har en lokal HighestBid i stedet for en global?
+
+				- HighestBid er nu lokal variabel. Giver 3 "success".*/
+			}
+		} else if input == "Result" {
+			for _, element := range ch.serversList {
+				req := &Handin5.Request{}
+				resp, err := element.Result(context.Background(), req)
+				if err != nil {
+					log.Fatalf("Request failed %v", err)
+				}
+				log.Println(resp.HighestBid)
+			}
 		}
 	}
-
 	//bid api call to all servers
 	//accept all replies, and print óne in terminal
 	//handle server crashing - use someone elses reply
 }
-
-func (ch *clienthandle) BidMoney() {
-	fmt.Printf("Write Bid as a whole number:")
-
-	reader := bufio.NewReader(os.Stdin)
-
-	clientMessage, err := reader.ReadString('\n')
-	if err != nil {
-		log.Fatalf(" Failed to read from console :: %v", err)
-	}
-
-	bid, err := strconv.Atoi(clientMessage)
-	if err != nil {
-		log.Fatalf(" Failed to read from console :: %v", err)
-	}
-
-	for _, element := range ch.servers {
-		bidMessage := &Handin5.BidMessage{ClientID: ch.clientId, Bid: int32(bid)}
-		ack, err := element.Bid(ch.ctx, bidMessage)
-		if err != nil {
-			log.Fatalf(" Bid Failed %v", err)
-		}
-		log.Printf(" %v", ack)
-	}
-
-	//bid api call to all servers
-	//accept all replies, and print óne in terminal
-	//handle server crashing - use someone elses reply
-}
-
-/*func (ch *clienthandle) result(){
-//get result
-}*/
-
-/*func (ch *clienthandle) sendMessage() {
-	for {
-		reader := bufio.NewReader(os.Stdin)
-
-		clientMessage, err := reader.ReadString('\n')
-		if err != nil {
-			log.Fatalf(" Failed to read from console :: %v", err)
-		}
-		clientMessage = strings.Trim(clientMessage, "\r\n")
-		ch.lamport++
-		clientMessageBox := &Videobranch.FromClient{
-			Name:    ch.clientName,
-			Body:    clientMessage,
-			Lamport: ch.lamport,
-		}
-
-		err = ch.stream.Send(clientMessageBox)
-
-		if err != nil {
-			log.Printf("Error while sending message to server :: %v", err)
-		}
-
-	}
-
-}
-
-func (ch *clienthandle) receiveMessage() {
-
-	for {
-		mssg, err := ch.stream.Recv()
-		if err != nil {
-			log.Printf("Error in reciving message from server :: %v", err, ch.clientName)
-		}
-		fmt.Printf("%s : %s \n", mssg.Name, mssg.Body)
-		if mssg.Lamport > ch.lamport {
-			ch.lamport = mssg.Lamport
-			ch.lamport++
-		} else {
-			ch.lamport++
-		}
-		fmt.Print("( Current Local Lamport Timestamp: ")
-		fmt.Printf("%v %s", ch.lamport, ")")
-		fmt.Println()
-		fmt.Println()
-
-	}
-
-}*/
