@@ -2,6 +2,7 @@ package Handin5
 
 //Credit: https://github.com/rrrCode9/gRPC-Bidirectional-Streaming-ChatServer/blob/main/client.go
 import (
+	context "context"
 	"sync"
 )
 
@@ -19,9 +20,11 @@ type clienthandle struct {
 
 var chatserviceHandleObject = chatserviceHandle{ClientBidMap: make(map[int]clienthandle), clientList: make([]clienthandle, 0)}
 
-type ChatServer struct{}
+type ChatServer struct {
+	UnimplementedServicesServer
+}
 
-func (is *ChatServer) Bid(bid *BidMessage) (*Ack, error) {
+func (is *ChatServer) Bid(ctx context.Context, bid *BidMessage) (*Ack, error) {
 	bidM := bid
 	isRegistered := false
 
@@ -75,7 +78,7 @@ func (is *ChatServer) Bid(bid *BidMessage) (*Ack, error) {
 
 }
 
-func (is *ChatServer) Result(req *Request) (*ResultReply, error) {
+func (is *ChatServer) Result(ctx context.Context, req *Request) (*ResultReply, error) {
 	chatserviceHandleObject.lo.Lock()
 
 	tempReply := &ResultReply{

@@ -3,7 +3,7 @@ package main
 //Credit: https://github.com/rrrCode9/gRPC-Bidirectional-Streaming-ChatServer/blob/main/client.go
 import (
 	"fmt"
-	Videobranch "grpcChatServer/chatserver"
+	Handin5 "grpcChatServer/chatserver"
 	"log"
 	"net"
 	"os"
@@ -18,7 +18,7 @@ func main() {
 	//arg1, _ := strconv.ParseInt(os.Args[1], 10, 32)
 	//Port := int32(arg1) + 5000
 
-	cs := Videobranch.ChatServer{}
+	cs := Handin5.ChatServer{}
 
 	for i := 0; i < 3; i++ {
 		Port := i + 5000
@@ -31,7 +31,7 @@ func main() {
 
 		grpcserver := grpc.NewServer()
 
-		Videobranch.RegisterServicesServer(grpcserver, &cs)
+		Handin5.RegisterServicesServer(grpcserver, &cs)
 
 		err = grpcserver.Serve(listen)
 		if err != nil {

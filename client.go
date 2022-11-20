@@ -3,10 +3,12 @@ package main
 //Credit: https://github.com/rrrCode9/gRPC-Bidirectional-Streaming-ChatServer/blob/main/client.go
 import (
 	"bufio"
+	"context"
 	"fmt"
-	Videobranch "grpcChatServer/chatserver"
+	Handin5 "grpcChatServer/chatserver"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 
 	"google.golang.org/grpc"
@@ -22,44 +24,104 @@ func main() {
 		log.Printf("Failed to read from console :: %v", err)
 	}
 	clientNameInput := strings.Trim(input, "\r\n")
+	servers := []Handin5.ServicesClient{}
+	for i := 0; i < 3; i++ {
+		temp := "localhost:"
+		serverID := temp + strconv.Itoa(5000+i)
+		log.Println("Connecting : " + serverID)
+		conn, err := grpc.Dial(serverID, grpc.WithInsecure()) //de forsk. servere
 
-	serverID := "localhost:5000"
+		if err != nil {
+			log.Fatalf("Failed to connect to gRPC server :: %v", err)
+		}
+		defer conn.Close()
 
-	log.Println("Connecting : " + serverID)
-
-	conn, err := grpc.Dial(serverID, grpc.WithInsecure()) //de forsk. servere
-
-	if err != nil {
-		log.Fatalf("Failed to connect to gRPC server :: %v", err)
+		client := Handin5.NewServicesClient(conn)
+		servers = append(servers, client)
 	}
-	defer conn.Close()
 
-	client := Videobranch.NewServicesClient(conn)
 	//stream, err := client.ChatService(context.Background())
 	if err != nil {
 		log.Fatalf("Failed to call ChatService :: %v", err)
 	}
 
-	ch := clienthandle{}
-	ch.joinChat(clientNameInput)
-	go ch.sendMessage()
-	go ch.receiveMessage()
+	reader2 := bufio.NewReader(os.Stdin)
+	fmt.Printf("WRITE UNIQUE ID PLS ;-;")
+	input2, err := reader2.ReadString('\n')
+	if err != nil {
+		log.Printf("Failed to read from console :: %v", err)
+	}
 
+	clientId, err := strconv.Atoi(input2)
+	ch := clienthandle{clientName: clientNameInput, servers: servers, clientId: int32(clientId)}
+
+	go ch.Terminal()
 	bl := make(chan bool)
 	<-bl
 }
 
 type clienthandle struct {
-	stream     Videobranch.Services_ChatServiceClient
+	clientId   int32
 	clientName string
+	servers    []Handin5.ServicesClient
 	lamport    int32
+	ctx        context.Context
 }
 
-/*func (ch *clienthandle) bid(int amount) {
+func (ch *clienthandle) Terminal() {
+
+	for {
+		fmt.Printf("Write either 1 for bid or 2 for Request")
+
+		reader := bufio.NewReader(os.Stdin)
+
+		clientMessage, err := reader.ReadString('\n')
+		if err != nil {
+			log.Fatalf(" Failed to read from console :: %v", err)
+		}
+		fmt.Printf(clientMessage)
+		command, err := strconv.Atoi(clientMessage)
+		if command == 1 {
+			fmt.Printf("HEWWO")
+			ch.BidMoney()
+		} else if command == 2 {
+			//ch.Request()
+		}
+	}
+
 	//bid api call to all servers
 	//accept all replies, and print óne in terminal
 	//handle server crashing - use someone elses reply
-}*/
+}
+
+func (ch *clienthandle) BidMoney() {
+	fmt.Printf("Write Bid as a whole number:")
+
+	reader := bufio.NewReader(os.Stdin)
+
+	clientMessage, err := reader.ReadString('\n')
+	if err != nil {
+		log.Fatalf(" Failed to read from console :: %v", err)
+	}
+
+	bid, err := strconv.Atoi(clientMessage)
+	if err != nil {
+		log.Fatalf(" Failed to read from console :: %v", err)
+	}
+
+	for _, element := range ch.servers {
+		bidMessage := &Handin5.BidMessage{ClientID: ch.clientId, Bid: int32(bid)}
+		ack, err := element.Bid(ch.ctx, bidMessage)
+		if err != nil {
+			log.Fatalf(" Bid Failed %v", err)
+		}
+		log.Printf(" %v", ack)
+	}
+
+	//bid api call to all servers
+	//accept all replies, and print óne in terminal
+	//handle server crashing - use someone elses reply
+}
 
 /*func (ch *clienthandle) result(){
 //get result
