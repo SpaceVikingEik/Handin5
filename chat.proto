@@ -1,22 +1,32 @@
 syntax = "proto3";
 package chatserver;
 
-option go_package = "github.com/VictoriousAnnro/HomeWork3/tree/Videolamportbranch";
+option go_package = "github.com/SpaceVikingEik/Handin5";
 
-message FromClient{
+/*protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative chat.proto*/
 
-    string name = 1;
-    string body = 2;
-    int32 lamport = 3;
+message BidMessage{
+    int32 clientID = 1;
+    int32 bid = 2;
 }
 
-message FromServer{
+message Ack{
+    string response = 1;
+    //fail, success or exception
+}
 
-    string name = 1;
-    string body = 2;
-    int32 lamport = 3;
+message Request{
+    int32 clientID = 1;
+}
+
+message ResultReply{
+    bool auctionOver = 1;
+    int32 highestBid = 2;
 }
 
 service Services{
-    rpc ChatService(stream FromClient) returns (stream FromServer){};
+    //rpc ChatService(stream FromClient) returns (stream FromServer){};
+    //server skal vel ikke modtage/sende stream? bare én besked af gangen
+    rpc Bid(BidMessage) returns (Ack){};
+    rpc Result(Request) returns (ResultReply){};
 }

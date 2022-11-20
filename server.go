@@ -17,7 +17,7 @@ func main() {
 	Port := os.Getenv("PORT")
 	if Port == "" {
 		Port = "5000"
-	}
+	} //ændr til 3 forsk.
 
 	listen, err := net.Listen("tcp", ":"+Port)
 	if err != nil {

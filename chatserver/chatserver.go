@@ -37,11 +37,14 @@ type clienthandle struct {
 var messageHandleObject = messageHandle{}
 var chatserviceHandleObject = chatserviceHandle{ClientMap: make(map[int]clienthandle)}
 
+//var currentHighestBid = 0;
+
 type ChatServer struct {
 }
 
 func (is *ChatServer) ChatService(csi Services_ChatServiceServer) error {
-
+	//modtag req, process, og returner så
+	//kan vel slette alle de andre metoder under, samt structs over?
 	clientUniqueCode := rand.Intn(1e6)
 	errch := make(chan error)
 
@@ -51,6 +54,13 @@ func (is *ChatServer) ChatService(csi Services_ChatServiceServer) error {
 	return <-errch
 
 }
+
+//int bid(int amount){ returns ack - succesful, fail or exception
+//bid MUST be higher than any prev ones
+//do some lock shiet so no-one edits current bid at same time
+//first bid 'registers' bidder - let all know result when auction done?}
+
+//int result(){ //returns highest bid }
 
 func recieveFromStream(csi_ Services_ChatServiceServer, clientUniqueCode int, errch_ chan error) {
 

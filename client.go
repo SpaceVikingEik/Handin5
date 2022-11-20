@@ -28,7 +28,7 @@ func main() {
 
 	log.Println("Connecting : " + serverID)
 
-	conn, err := grpc.Dial(serverID, grpc.WithInsecure())
+	conn, err := grpc.Dial(serverID, grpc.WithInsecure()) //de forsk. servere
 
 	if err != nil {
 		log.Fatalf("Failed to connect to gRPC server :: %v", err)
@@ -55,6 +55,16 @@ type clienthandle struct {
 	clientName string
 	lamport    int32
 }
+
+/*func (ch *clienthandle) bid(int amount) {
+	//bid api call to all servers
+	//accept all replies, and print óne in terminal
+	//handle server crashing - use someone elses reply
+}*/
+
+/*func (ch *clienthandle) result(){
+//get result
+}*/
 
 func (ch *clienthandle) joinChat(clientNameInput string) {
 	ch.clientName = clientNameInput
