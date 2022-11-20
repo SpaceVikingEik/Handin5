@@ -2,10 +2,12 @@ package main
 
 //Credit: https://github.com/rrrCode9/gRPC-Bidirectional-Streaming-ChatServer/blob/main/client.go
 import (
+	"fmt"
 	Videobranch "grpcChatServer/chatserver"
 	"log"
 	"net"
 	"os"
+	"strconv"
 
 	"google.golang.org/grpc"
 )
@@ -14,16 +16,14 @@ func main() {
 
 	f := setLog()
 	defer f.Close()
-	Port := os.Getenv("PORT")
-	if Port == "" {
-		Port = "5000"
-	} //ændr til 3 forsk.
+	arg1, _ := strconv.ParseInt(os.Args[1], 10, 32)
+	Port := int32(arg1) + 5000
 
-	listen, err := net.Listen("tcp", ":"+Port)
+	listen, err := net.Listen("tcp", fmt.Sprintf(":%v", Port))
 	if err != nil {
 		log.Fatalf("Could not listen on @ %v :: %v", Port, err)
 	}
-	log.Println("Listening @ : " + Port)
+	log.Println("Listening @ : ", fmt.Sprintf(":%v", Port))
 
 	grpcserver := grpc.NewServer()
 
