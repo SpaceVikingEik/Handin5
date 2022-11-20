@@ -1,5 +1,5 @@
 syntax = "proto3";
-package chatserver;
+package Handin5;
 
 option go_package = "github.com/SpaceVikingEik/Handin5";
 

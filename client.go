@@ -3,7 +3,6 @@ package main
 //Credit: https://github.com/rrrCode9/gRPC-Bidirectional-Streaming-ChatServer/blob/main/client.go
 import (
 	"bufio"
-	"context"
 	"fmt"
 	Videobranch "grpcChatServer/chatserver"
 	"log"
@@ -36,12 +35,12 @@ func main() {
 	defer conn.Close()
 
 	client := Videobranch.NewServicesClient(conn)
-	stream, err := client.ChatService(context.Background())
+	//stream, err := client.ChatService(context.Background())
 	if err != nil {
 		log.Fatalf("Failed to call ChatService :: %v", err)
 	}
 
-	ch := clienthandle{stream: stream}
+	ch := clienthandle{}
 	ch.joinChat(clientNameInput)
 	go ch.sendMessage()
 	go ch.receiveMessage()
@@ -66,19 +65,7 @@ type clienthandle struct {
 //get result
 }*/
 
-func (ch *clienthandle) joinChat(clientNameInput string) {
-	ch.clientName = clientNameInput
-	ch.lamport = 1
-	clientMessageBox := &Videobranch.FromClient{
-		Name:    ch.clientName,
-		Body:    "May I join?? uwu",
-		Lamport: ch.lamport,
-	}
-	ch.stream.Send(clientMessageBox)
-
-}
-
-func (ch *clienthandle) sendMessage() {
+/*func (ch *clienthandle) sendMessage() {
 	for {
 		reader := bufio.NewReader(os.Stdin)
 
@@ -125,4 +112,4 @@ func (ch *clienthandle) receiveMessage() {
 
 	}
 
-}
+}*/

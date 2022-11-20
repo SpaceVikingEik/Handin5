@@ -1,48 +1,94 @@
-package Videolamportbranch
+package Handin5
 
 //Credit: https://github.com/rrrCode9/gRPC-Bidirectional-Streaming-ChatServer/blob/main/client.go
 import (
-	"fmt"
-	"log"
-	"math/rand"
 	"sync"
-	"time"
-
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
-type messageUnit struct {
-	ClientName  string
-	MessageBody string
-	Lamport     int32
-}
-
-type messageHandle struct {
-	MQue []messageUnit
-	mu   sync.Mutex
-}
-
 type chatserviceHandle struct {
-	ClientMap map[int]clienthandle
-	lo        sync.Mutex
+	ClientBidMap      map[int]clienthandle
+	lo                sync.Mutex
+	currentHighestBid int32
+	clientList        []clienthandle
 }
 
 type clienthandle struct {
-	clientStream Services_ChatServiceServer
-	cName        string
-	id           int
+	cName string
+	id    int
 }
 
-var messageHandleObject = messageHandle{}
-var chatserviceHandleObject = chatserviceHandle{ClientMap: make(map[int]clienthandle)}
+var chatserviceHandleObject = chatserviceHandle{ClientBidMap: make(map[int]clienthandle), clientList: make([]clienthandle, 0)}
 
-//var currentHighestBid = 0;
+type ChatServer struct{}
 
-type ChatServer struct {
+func (is *ChatServer) Bid(bid *BidMessage) (*Ack, error) {
+	bidM := bid
+	isRegistered := false
+
+	chatserviceHandleObject.lo.Lock()
+	for _, element := range chatserviceHandleObject.clientList {
+		if bidM.ClientID == int32(element.id) {
+			isRegistered = true
+		}
+	}
+	if isRegistered {
+		if bidM.Bid > int32(chatserviceHandleObject.currentHighestBid) {
+			chatserviceHandleObject.currentHighestBid = bidM.Bid
+
+			ack := &Ack{
+				Response: "Success",
+			}
+
+			chatserviceHandleObject.lo.Unlock()
+			return ack, nil
+
+		} else {
+			ack := &Ack{
+				Response: "Fail",
+			}
+			chatserviceHandleObject.lo.Unlock()
+			return ack, nil
+		}
+
+	} else {
+		temp := clienthandle{cName: "", id: int(bidM.ClientID)}
+		chatserviceHandleObject.clientList = append(chatserviceHandleObject.clientList, temp)
+		chatserviceHandleObject.ClientBidMap[0] = temp
+
+		if bidM.Bid > int32(chatserviceHandleObject.currentHighestBid) {
+			chatserviceHandleObject.currentHighestBid = bidM.Bid
+
+			ack := &Ack{
+				Response: "Success",
+			}
+			chatserviceHandleObject.lo.Unlock()
+			return ack, nil
+
+		} else {
+			ack := &Ack{
+				Response: "Fail",
+			}
+			chatserviceHandleObject.lo.Unlock()
+			return ack, nil
+		}
+	}
+
 }
 
-func (is *ChatServer) ChatService(csi Services_ChatServiceServer) error {
+func (is *ChatServer) Result(req *Request) (*ResultReply, error) {
+	chatserviceHandleObject.lo.Lock()
+
+	tempReply := &ResultReply{
+		AuctionOver: false, //check
+		HighestBid:  chatserviceHandleObject.currentHighestBid,
+	}
+	chatserviceHandleObject.lo.Unlock()
+
+	return tempReply, nil
+
+}
+
+/*func (is *ChatServer) ChatService(csi Services_ChatServiceServer) error {
 	//modtag req, process, og returner så
 	//kan vel slette alle de andre metoder under, samt structs over?
 	clientUniqueCode := rand.Intn(1e6)
@@ -53,7 +99,7 @@ func (is *ChatServer) ChatService(csi Services_ChatServiceServer) error {
 
 	return <-errch
 
-}
+}*/
 
 //int bid(int amount){ returns ack - succesful, fail or exception
 //bid MUST be higher than any prev ones
@@ -62,7 +108,7 @@ func (is *ChatServer) ChatService(csi Services_ChatServiceServer) error {
 
 //int result(){ //returns highest bid }
 
-func recieveFromStream(csi_ Services_ChatServiceServer, clientUniqueCode int, errch_ chan error) {
+/*func recieveFromStream(csi_ Services_ChatServiceServer, clientUniqueCode int, errch_ chan error) {
 
 	for {
 		mssg, err := csi_.Recv()
@@ -171,4 +217,4 @@ func sendToStream(errch_ chan error) {
 
 		time.Sleep(100 * time.Millisecond)
 	}
-}
+}*/

@@ -7,7 +7,6 @@ import (
 	"log"
 	"net"
 	"os"
-	"strconv"
 
 	"google.golang.org/grpc"
 )
@@ -16,24 +15,49 @@ func main() {
 
 	f := setLog()
 	defer f.Close()
-	arg1, _ := strconv.ParseInt(os.Args[1], 10, 32)
-	Port := int32(arg1) + 5000
+	//arg1, _ := strconv.ParseInt(os.Args[1], 10, 32)
+	//Port := int32(arg1) + 5000
 
-	listen, err := net.Listen("tcp", fmt.Sprintf(":%v", Port))
+	cs := Videobranch.ChatServer{}
+
+	for i := 0; i < 3; i++ {
+		Port := i + 5000
+
+		listen, err := net.Listen("tcp", fmt.Sprintf(":%v", Port))
+		if err != nil {
+			log.Fatalf("Could not listen on @ %v :: %v", Port, err)
+		}
+		log.Println("Listening @ : ", fmt.Sprintf(":%v", Port))
+
+		grpcserver := grpc.NewServer()
+
+		Videobranch.RegisterServicesServer(grpcserver, &cs)
+
+		err = grpcserver.Serve(listen)
+		if err != nil {
+			log.Fatalf("Failed to start gRPC server :: %v", err)
+		}
+	}
+
+	/*listen, err := net.Listen("tcp", fmt.Sprintf(":%v", Port))
 	if err != nil {
 		log.Fatalf("Could not listen on @ %v :: %v", Port, err)
 	}
-	log.Println("Listening @ : ", fmt.Sprintf(":%v", Port))
+	log.Println("Listening @ : ", fmt.Sprintf(":%v", Port))*/
 
-	grpcserver := grpc.NewServer()
+	//grpcserver1 := grpc.NewServer()
+	//grpcserver1 := grpc.NewServer()
+	//grpcserver1 := grpc.NewServer()
 
-	cs := Videobranch.ChatServer{}
-	Videobranch.RegisterServicesServer(grpcserver, &cs)
+	//cs := Videobranch.ChatServer{}
+	//Videobranch.RegisterServicesServer(grpcserver, &cs)
+	//Videobranch.RegisterServicesServer(grpcserver, &cs)
+	//Videobranch.RegisterServicesServer(grpcserver, &cs)
 
-	err = grpcserver.Serve(listen)
+	/*err = grpcserver.Serve(listen)
 	if err != nil {
 		log.Fatalf("Failed to start gRPC server :: %v", err)
-	}
+	}*/
 
 }
 
