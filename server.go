@@ -34,7 +34,7 @@ func main() {
 		go startServing(grpcserver, listen)
 	}
 
-	time.Sleep(20000 * time.Millisecond)
+	time.Sleep(40000 * time.Millisecond)
 	grpcserver.Stop()
 	cha := make(chan bool)
 	<-cha

@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"context"
-	"fmt"
 	Handin5 "grpcChatServer/chatserver"
 	"log"
 	"os"
@@ -14,9 +13,8 @@ import (
 )
 
 func main() {
-
-	fmt.Println("--- Enter a Username ---")
-	fmt.Printf("Your Name : ")
+	log.Println("--- Enter a Username ---")
+	log.Printf("Your Name : ")
 	reader := bufio.NewReader(os.Stdin)
 	input, err := reader.ReadString('\n')
 	if err != nil {
@@ -40,7 +38,7 @@ func main() {
 	}
 
 	reader2 := bufio.NewReader(os.Stdin)
-	fmt.Println("WRITE UNIQUE ID PLS ;-;")
+	log.Println("WRITE UNIQUE ID PLS ;-;")
 	input2, err := reader2.ReadString('\n')
 	if err != nil {
 		log.Printf("Failed to read from console :: %v", err)
@@ -64,7 +62,7 @@ type clienthandle struct {
 func (ch *clienthandle) Terminal() {
 
 	for {
-		fmt.Println("Write 'Bid' to create a bid, or 'Result' to see current highest bid")
+		log.Println("Write 'Bid' to create a bid, or 'Result' to see current highest bid")
 
 		reader := bufio.NewReader(os.Stdin)
 
@@ -75,7 +73,7 @@ func (ch *clienthandle) Terminal() {
 
 		input := strings.Trim(clientMessage, "\r\n")
 		if input == "Bid" {
-			fmt.Println("Write your bid:")
+			log.Println("Write your bid:")
 
 			clientBid, err := reader.ReadString('\n')
 			inputBid := strings.Trim(clientBid, "\r\n")
@@ -114,4 +112,5 @@ func (ch *clienthandle) Terminal() {
 	//bid api call to all servers
 	//accept all replies, and print óne in terminal
 	//handle server crashing - use someone elses reply
+
 }
