@@ -1,3 +1,25 @@
-2022/11/23 12:06:33 Listening @ :  :5000
-2022/11/23 12:06:33 Listening @ :  :5001
-2022/11/23 12:06:33 Listening @ :  :5002
+2022/11/23 12:36:58 Connecting : localhost:5000
+2022/11/23 12:36:58 Connecting : localhost:5001
+2022/11/23 12:36:58 Connecting : localhost:5002
+2022/11/23 12:37:04 Success
+2022/11/23 12:37:04 Success
+2022/11/23 12:37:04 Success
+2022/11/23 12:37:08 Success
+2022/11/23 12:37:08 Success
+2022/11/23 12:37:08 Success
+2022/11/23 12:37:14 Success
+2022/11/23 12:37:14 Success
+2022/11/23 12:37:14 Success
+2022/11/23 12:37:21 Success
+2022/11/23 12:37:21 Success
+2022/11/23 12:37:23  Bid Failed rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing dial tcp [::1]:5002: connectex: No connection could be made because the target machine actively refused it."
+2022/11/23 12:37:26 1238945
+2022/11/23 12:37:26 Auction is over:  false
+2022/11/23 12:37:26 1238945
+2022/11/23 12:37:26 Auction is over:  false
+2022/11/23 12:37:28 Request failed rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing dial tcp [::1]:5002: connectex: No connection could be made because the target machine actively refused it."
+2022/11/23 12:37:31 1238945
+2022/11/23 12:37:31 Auction is over:  true
+2022/11/23 12:37:31 1238945
+2022/11/23 12:37:31 Auction is over:  true
+2022/11/23 12:37:33 Request failed rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing dial tcp [::1]:5002: connectex: No connection could be made because the target machine actively refused it."

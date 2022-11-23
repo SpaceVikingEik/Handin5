@@ -108,6 +108,7 @@ func (ch *clienthandle) Terminal() {
 					log.Printf("Request failed %v", err)
 				} else {
 					log.Println(resp.HighestBid)
+					log.Println("Auction is over: ", resp.AuctionOver)
 				}
 			}
 		}

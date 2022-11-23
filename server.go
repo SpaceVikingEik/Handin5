@@ -28,7 +28,6 @@ func main() {
 		cs := Handin5.ChatServer{}
 
 		grpcserver = grpc.NewServer()
-
 		Handin5.RegisterServicesServer(grpcserver, &cs)
 
 		go startServing(grpcserver, listen)
