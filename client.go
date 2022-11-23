@@ -98,13 +98,6 @@ func (ch *clienthandle) Terminal() {
 					}
 					log.Println(tempResponse, "Server: ", element)
 				}
-
-				/*NOTES:
-				Calling this with a bid that gets accepted, results in 1 response "success" and 2 of "Fail".
-				I aktiv replik. skal hver server modtage og processe de samme requests fra clients i samme rækkefølge.
-				Kan vi antage et dette betyder, at de alle har en lokal HighestBid i stedet for en global?
-
-				- HighestBid er nu lokal variabel. Giver 3 "success".*/
 			}
 			fmt.Println(tempResponse)
 		} else if input == "Result" {
@@ -126,9 +119,6 @@ func (ch *clienthandle) Terminal() {
 			fmt.Println("Auction is over: ", tempResponse2)
 		}
 	}
-	//bid api call to all servers
-	//accept all replies, and print óne in terminal
-	//handle server crashing - use someone elses reply
 
 }
 
