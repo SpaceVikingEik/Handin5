@@ -70,7 +70,7 @@ func (ch *clienthandle) Terminal() {
 
 		clientMessage, err := reader.ReadString('\n')
 		if err != nil {
-			log.Fatalf(" Failed to read from console :: %v", err)
+			log.Printf(" Failed to read from console :: %v", err)
 		}
 
 		input := strings.Trim(clientMessage, "\r\n")
@@ -80,7 +80,7 @@ func (ch *clienthandle) Terminal() {
 			clientBid, err := reader.ReadString('\n')
 			inputBid := strings.Trim(clientBid, "\r\n")
 			if err != nil {
-				log.Fatalf(" Failed to read from console :: %v", err)
+				log.Printf(" Failed to read from console :: %v", err)
 			}
 
 			bid, err := strconv.Atoi(inputBid)
@@ -88,10 +88,10 @@ func (ch *clienthandle) Terminal() {
 				bidMessage := &Handin5.BidMessage{ClientID: int64(ch.clientId), Bid: int64(bid)}
 				ack, err := element.Bid(context.Background(), bidMessage)
 				if err != nil {
-					log.Fatalf(" Bid Failed %v", err)
+					log.Printf(" Bid Failed %v", err)
+				} else {
+					log.Println(ack.Response)
 				}
-				log.Println(ack.Response)
-
 				/*NOTES:
 				Calling this with a bid that gets accepted, results in 1 response "success" and 2 of "Fail".
 				I aktiv replik. skal hver server modtage og processe de samme requests fra clients i samme rækkefølge.
@@ -104,9 +104,10 @@ func (ch *clienthandle) Terminal() {
 				req := &Handin5.Request{}
 				resp, err := element.Result(context.Background(), req)
 				if err != nil {
-					log.Fatalf("Request failed %v", err)
+					log.Printf("Request failed %v", err)
+				} else {
+					log.Println(resp.HighestBid)
 				}
-				log.Println(resp.HighestBid)
 			}
 		}
 	}

@@ -6,6 +6,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"time"
 
 	"google.golang.org/grpc"
 )
@@ -14,7 +15,7 @@ func main() {
 
 	f := setLog()
 	defer f.Close()
-
+	var grpcserver *grpc.Server
 	for i := 0; i < 3; i++ {
 		Port := i + 5000
 
@@ -26,12 +27,15 @@ func main() {
 
 		cs := Handin5.ChatServer{}
 
-		grpcserver := grpc.NewServer()
+		grpcserver = grpc.NewServer()
 
 		Handin5.RegisterServicesServer(grpcserver, &cs)
 
 		go startServing(grpcserver, listen)
 	}
+
+	time.Sleep(20000 * time.Millisecond)
+	grpcserver.Stop()
 	cha := make(chan bool)
 	<-cha
 }
