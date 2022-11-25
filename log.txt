@@ -1,25 +1,25 @@
-2022/11/23 12:36:58 Connecting : localhost:5000
-2022/11/23 12:36:58 Connecting : localhost:5001
-2022/11/23 12:36:58 Connecting : localhost:5002
-2022/11/23 12:37:04 Success
-2022/11/23 12:37:04 Success
-2022/11/23 12:37:04 Success
-2022/11/23 12:37:08 Success
-2022/11/23 12:37:08 Success
-2022/11/23 12:37:08 Success
-2022/11/23 12:37:14 Success
-2022/11/23 12:37:14 Success
-2022/11/23 12:37:14 Success
-2022/11/23 12:37:21 Success
-2022/11/23 12:37:21 Success
-2022/11/23 12:37:23  Bid Failed rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing dial tcp [::1]:5002: connectex: No connection could be made because the target machine actively refused it."
-2022/11/23 12:37:26 1238945
-2022/11/23 12:37:26 Auction is over:  false
-2022/11/23 12:37:26 1238945
-2022/11/23 12:37:26 Auction is over:  false
-2022/11/23 12:37:28 Request failed rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing dial tcp [::1]:5002: connectex: No connection could be made because the target machine actively refused it."
-2022/11/23 12:37:31 1238945
-2022/11/23 12:37:31 Auction is over:  true
-2022/11/23 12:37:31 1238945
-2022/11/23 12:37:31 Auction is over:  true
-2022/11/23 12:37:33 Request failed rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing dial tcp [::1]:5002: connectex: No connection could be made because the target machine actively refused it."
+2022/11/23 12:56:12 Connecting : localhost:5000
+2022/11/23 12:56:12 Connecting : localhost:5001
+2022/11/23 12:56:12 Connecting : localhost:5002
+2022/11/23 12:56:17 Newest Highest Bid:  94235687
+2022/11/23 12:56:17 Success Server:  &{0xc00001bc00}
+2022/11/23 12:56:17 Newest Highest Bid:  94235687
+2022/11/23 12:56:17 Success Server:  &{0xc00021c000}
+2022/11/23 12:56:17 Newest Highest Bid:  94235687
+2022/11/23 12:56:17 Success Server:  &{0xc00021c380}
+2022/11/23 12:56:20 Current Highest Bid:  94235687
+2022/11/23 12:56:20 Auction is over:  false Server:  &{0xc00001bc00}
+2022/11/23 12:56:20 Current Highest Bid:  94235687
+2022/11/23 12:56:20 Auction is over:  false Server:  &{0xc00021c000}
+2022/11/23 12:56:20 Current Highest Bid:  94235687
+2022/11/23 12:56:20 Auction is over:  false Server:  &{0xc00021c380}
+2022/11/23 12:56:40 Newest Highest Bid:  9223372036854775807
+2022/11/23 12:56:40 Success Server:  &{0xc00001bc00}
+2022/11/23 12:56:40 Newest Highest Bid:  9223372036854775807
+2022/11/23 12:56:40 Success Server:  &{0xc00021c000}
+2022/11/23 12:56:42  Bid Failed rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing dial tcp [::1]:5002: connectex: No connection could be made because the target machine actively refused it."
+2022/11/23 12:57:03 Current Highest Bid:  9223372036854775807
+2022/11/23 12:57:03 Auction is over:  true Server:  &{0xc00001bc00}
+2022/11/23 12:57:03 Current Highest Bid:  9 223 372 036 854 775 807
+2022/11/23 12:57:03 Auction is over:  true Server:  &{0xc00021c000}
+2022/11/23 12:57:06 Request failed rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing dial tcp [::1]:5002: connectex: No connection could be made because the target machine actively refused it."

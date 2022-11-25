@@ -84,7 +84,7 @@ func (ch *clienthandle) Terminal() {
 			if err != nil {
 				log.Printf(" Failed to read from console :: %v", err)
 			}
-
+			var tempResponse string
 			bid, err := strconv.Atoi(inputBid)
 			ch.lamport++
 			for _, element := range ch.serversList {
@@ -95,27 +95,33 @@ func (ch *clienthandle) Terminal() {
 				if err != nil {
 					log.Printf(" Bid Failed %v", err)
 				} else {
-					log.Println(ack.Response)
-				}
-				/*NOTES:
-				Calling this with a bid that gets accepted, results in 1 response "success" and 2 of "Fail".
-				I aktiv replik. skal hver server modtage og processe de samme requests fra clients i samme rækkefølge.
-				Kan vi antage et dette betyder, at de alle har en lokal HighestBid i stedet for en global?
 
-				- HighestBid er nu lokal variabel. Giver 3 "success".*/
+					tempResponse = ack.Response
+					if ack.Response == "Success" {
+						log.Println("Newest Highest Bid: ", int64(bid))
+					}
+					log.Println(tempResponse, "Server: ", element)
+				}
 			}
+			fmt.Println(tempResponse)
 		} else if input == "Result" {
 			ch.lamport++
+			var tempResponse1 int64
+			var tempResponse2 bool
 			for _, element := range ch.serversList {
 				req := &Handin5.Request{ClientID: int64(ch.clientId), OrderIndex: int64(ch.lamport)}
 				resp, err := element.Result(context.Background(), req)
 				if err != nil {
 					log.Printf("Request failed %v", err)
 				} else {
-					log.Println(resp.HighestBid)
-					log.Println("Auction is over: ", resp.AuctionOver)
+					tempResponse1 = resp.HighestBid
+					tempResponse2 = resp.AuctionOver
+					log.Println("Current Highest Bid: ", tempResponse1)
+					log.Println("Auction is over: ", tempResponse2, "Server: ", element)
 				}
 			}
+			fmt.Println(tempResponse1)
+			fmt.Println("Auction is over: ", tempResponse2)
 		}
 	}
 
