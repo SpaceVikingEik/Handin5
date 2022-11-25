@@ -1,25 +1,31 @@
-2022/11/23 12:56:12 Connecting : localhost:5000
-2022/11/23 12:56:12 Connecting : localhost:5001
-2022/11/23 12:56:12 Connecting : localhost:5002
-2022/11/23 12:56:17 Newest Highest Bid:  94235687
-2022/11/23 12:56:17 Success Server:  &{0xc00001bc00}
-2022/11/23 12:56:17 Newest Highest Bid:  94235687
-2022/11/23 12:56:17 Success Server:  &{0xc00021c000}
-2022/11/23 12:56:17 Newest Highest Bid:  94235687
-2022/11/23 12:56:17 Success Server:  &{0xc00021c380}
-2022/11/23 12:56:20 Current Highest Bid:  94235687
-2022/11/23 12:56:20 Auction is over:  false Server:  &{0xc00001bc00}
-2022/11/23 12:56:20 Current Highest Bid:  94235687
-2022/11/23 12:56:20 Auction is over:  false Server:  &{0xc00021c000}
-2022/11/23 12:56:20 Current Highest Bid:  94235687
-2022/11/23 12:56:20 Auction is over:  false Server:  &{0xc00021c380}
-2022/11/23 12:56:40 Newest Highest Bid:  9223372036854775807
-2022/11/23 12:56:40 Success Server:  &{0xc00001bc00}
-2022/11/23 12:56:40 Newest Highest Bid:  9223372036854775807
-2022/11/23 12:56:40 Success Server:  &{0xc00021c000}
-2022/11/23 12:56:42  Bid Failed rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing dial tcp [::1]:5002: connectex: No connection could be made because the target machine actively refused it."
-2022/11/23 12:57:03 Current Highest Bid:  9223372036854775807
-2022/11/23 12:57:03 Auction is over:  true Server:  &{0xc00001bc00}
-2022/11/23 12:57:03 Current Highest Bid:  9 223 372 036 854 775 807
-2022/11/23 12:57:03 Auction is over:  true Server:  &{0xc00021c000}
-2022/11/23 12:57:06 Request failed rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing dial tcp [::1]:5002: connectex: No connection could be made because the target machine actively refused it."
+2022/11/25 18:17:41 Connecting : localhost:5000
+2022/11/25 18:17:41 Connecting : localhost:5001
+2022/11/25 18:17:41 Connecting : localhost:5002
+2022/11/25 18:17:44 Client wants to bid: 2
+2022/11/25 18:17:44 Auction has begun for server!
+2022/11/25 18:17:44 Newest Highest Bid:  2
+2022/11/25 18:17:44 Success Server:  &{0xc000129c00}
+2022/11/25 18:17:44 Auction has begun for server!
+2022/11/25 18:17:44 Newest Highest Bid:  2
+2022/11/25 18:17:44 Success Server:  &{0xc0001f6000}
+2022/11/25 18:17:44 Auction has begun for server!
+2022/11/25 18:17:44 Newest Highest Bid:  2
+2022/11/25 18:17:44 Success Server:  &{0xc0001f6380}
+2022/11/25 18:17:51 Client wants to bid: 5
+2022/11/25 18:17:53 Newest Highest Bid:  5
+2022/11/25 18:17:53 Success Server:  &{0xc000129c00}
+2022/11/25 18:17:55 Newest Highest Bid:  5
+2022/11/25 18:17:55 Success Server:  &{0xc0001f6000}
+2022/11/25 18:17:55  Bid Failed rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing dial tcp [::1]:5002: connect: connection refused"
+2022/11/25 18:17:55 Client wants to bid: 10
+2022/11/25 18:17:57 Newest Highest Bid:  10
+2022/11/25 18:17:57 Success Server:  &{0xc000129c00}
+2022/11/25 18:17:59 Newest Highest Bid:  10
+2022/11/25 18:17:59 Success Server:  &{0xc0001f6000}
+2022/11/25 18:17:59  Bid Failed rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing dial tcp [::1]:5002: connect: connection refused"
+2022/11/25 18:18:06 Client requested result
+2022/11/25 18:18:06 Current Highest Bid:  10
+2022/11/25 18:18:06 Auction is over:  false Server:  &{0xc000129c00}
+2022/11/25 18:18:06 Current Highest Bid:  10
+2022/11/25 18:18:06 Auction is over:  false Server:  &{0xc0001f6000}
+2022/11/25 18:18:06 Request failed rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing dial tcp [::1]:5002: connect: connection refused"

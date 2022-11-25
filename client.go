@@ -48,8 +48,7 @@ func main() {
 	}
 
 	clientId, err := strconv.Atoi(input2)
-	ch := clienthandle{clientName: clientNameInput, serversList: servers, clientId: clientId,
-		lamport: 0}
+	ch := clienthandle{clientName: clientNameInput, serversList: servers, clientId: clientId}
 
 	go ch.Terminal()
 	bl := make(chan bool)
@@ -59,12 +58,10 @@ func main() {
 type clienthandle struct {
 	clientId    int
 	clientName  string
-	lamport     int
 	serversList []Handin5.ServicesClient
 }
 
 func (ch *clienthandle) Terminal() {
-
 	for {
 		fmt.Println("Write 'Bid' to create a bid, or 'Result' to see current highest bid")
 
@@ -86,11 +83,9 @@ func (ch *clienthandle) Terminal() {
 			}
 			var tempResponse string
 			bid, err := strconv.Atoi(inputBid)
-			ch.lamport++
+			log.Printf("Client wants to bid: %v", bid)
 			for _, element := range ch.serversList {
-				//bidMessage := &Handin5.BidMessage{ClientID: int64(ch.clientId), Bid: int64(bid)}
-				bidMessage := &Handin5.BidMessage{ClientID: int64(ch.clientId), Bid: int64(bid),
-					OrderIndex: int64(ch.lamport)}
+				bidMessage := &Handin5.BidMessage{ClientID: int64(ch.clientId), Bid: int64(bid)}
 				ack, err := element.Bid(context.Background(), bidMessage)
 				if err != nil {
 					log.Printf(" Bid Failed %v", err)
@@ -105,11 +100,11 @@ func (ch *clienthandle) Terminal() {
 			}
 			fmt.Println(tempResponse)
 		} else if input == "Result" {
-			ch.lamport++
 			var tempResponse1 int64
 			var tempResponse2 bool
+			log.Println("Client requested result")
 			for _, element := range ch.serversList {
-				req := &Handin5.Request{ClientID: int64(ch.clientId), OrderIndex: int64(ch.lamport)}
+				req := &Handin5.Request{ClientID: int64(ch.clientId)}
 				resp, err := element.Result(context.Background(), req)
 				if err != nil {
 					log.Printf("Request failed %v", err)

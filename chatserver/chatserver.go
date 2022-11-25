@@ -26,14 +26,16 @@ type ChatServer struct {
 	currentHighestBid int
 	bidLock           sync.Mutex
 	auctionOver       bool
-	firstTime         bool
+	isNotFirstTime    bool
 }
 
 func (is *ChatServer) Bid(ctx context.Context, bid *BidMessage) (*Ack, error) {
-	if !is.firstTime {
-		log.Printf("Auction has begun!!!!!!")
-		go Timer(is)
-		is.firstTime = true
+	if !is.isNotFirstTime {
+		log.Printf("Auction has begun for server!")
+		go is.Timer()
+		is.isNotFirstTime = true
+	} else {
+		time.Sleep(2000 * time.Millisecond)
 	}
 	bidM := bid
 	isRegistered := false
@@ -89,28 +91,29 @@ func (is *ChatServer) Result(ctx context.Context, req *Request) (*ResultReply, e
 	if !is.auctionOver {
 		is.bidLock.Lock()
 		tempReply := &ResultReply{
-			AuctionOver: false, //check
+			AuctionOver: false,
 			HighestBid:  int64(is.currentHighestBid),
 		}
 		is.bidLock.Unlock()
 		return tempReply, nil
 	} else {
 		tempReply := &ResultReply{
-			AuctionOver: true, //check
+			AuctionOver: true,
 			HighestBid:  int64(is.currentHighestBid),
 		}
 		return tempReply, nil
 	}
 }
 
-func Timer(is *ChatServer) {
+func (is *ChatServer) Timer() {
 	timer := time.NewTimer(40000 * time.Millisecond)
 	buffer1 := make(chan bool)
 	go func() {
 		<-timer.C
 		buffer1 <- true
 	}()
+	var temp = <-buffer1
 	is.bidLock.Lock()
-	is.auctionOver = <-buffer1
+	is.auctionOver = temp
 	is.bidLock.Unlock()
 }

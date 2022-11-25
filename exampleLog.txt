@@ -1,0 +1,28 @@
+--These logs have been copy-pasted from a previous run of the program.
+--They are saved here so they do not get overwritten
+
+2022/11/25 17:45:42 Connecting : localhost:5000
+2022/11/25 17:45:42 Connecting : localhost:5001
+2022/11/25 17:45:42 Connecting : localhost:5002
+2022/11/25 17:45:46 Client wants to bid: 1
+2022/11/25 17:45:46 Auction has begun for server!
+2022/11/25 17:45:46 Newest Highest Bid:  1
+2022/11/25 17:45:46 Success Server:  &{0xc000136000}
+2022/11/25 17:45:46 Auction has begun for server!
+2022/11/25 17:45:46 Newest Highest Bid:  1
+2022/11/25 17:45:46 Success Server:  &{0xc000136380}
+2022/11/25 17:45:46 Auction has begun for server!
+2022/11/25 17:45:46 Newest Highest Bid:  1
+2022/11/25 17:45:46 Success Server:  &{0xc000136700}
+2022/11/25 17:45:48 Client wants to bid: 30
+2022/11/25 17:45:50 Newest Highest Bid:  30
+2022/11/25 17:45:50 Success Server:  &{0xc000136000}
+2022/11/25 17:45:52 Newest Highest Bid:  30
+2022/11/25 17:45:52 Success Server:  &{0xc000136380}
+2022/11/25 17:45:52  Bid Failed rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing dial tcp [::1]:5002: connect: connection refused"
+2022/11/25 17:45:52 Client requested result
+2022/11/25 17:45:52 Current Highest Bid:  30
+2022/11/25 17:45:52 Auction is over:  false Server:  &{0xc000136000}
+2022/11/25 17:45:52 Current Highest Bid:  30
+2022/11/25 17:45:52 Auction is over:  false Server:  &{0xc000136380}
+2022/11/25 17:45:52 Request failed rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing dial tcp [::1]:5002: connect: connection refused"
