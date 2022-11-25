@@ -8,6 +8,7 @@ option go_package = "github.com/SpaceVikingEik/Handin5";
 message BidMessage{
     int64 clientID = 1;
     int64 bid = 2;
+    int64 orderIndex = 3;
 }
 
 message Ack{
@@ -17,6 +18,7 @@ message Ack{
 
 message Request{
     int64 clientID = 1;
+    int64 orderIndex = 2;
 }
 
 message ResultReply{
@@ -27,6 +29,6 @@ message ResultReply{
 service Services{
     //rpc ChatService(stream FromClient) returns (stream FromServer){};
     //server skal vel ikke modtage/sende stream? bare én besked af gangen
-    rpc Bid(BidMessage) returns (Ack){};
-    rpc Result(Request) returns (ResultReply){};
+    rpc Bid(BidMessage) returns (Ack);
+    rpc Result(Request) returns (ResultReply);
 }

@@ -86,11 +86,13 @@ func (is *ChatServer) Bid(ctx context.Context, bid *BidMessage) (*Ack, error) {
 }
 
 func (is *ChatServer) Result(ctx context.Context, req *Request) (*ResultReply, error) {
-	if is.auctionOver == false {
+	if !is.auctionOver {
+		is.bidLock.Lock()
 		tempReply := &ResultReply{
 			AuctionOver: false, //check
 			HighestBid:  int64(is.currentHighestBid),
 		}
+		is.bidLock.Unlock()
 		return tempReply, nil
 	} else {
 		tempReply := &ResultReply{
@@ -108,6 +110,7 @@ func Timer(is *ChatServer) {
 		<-timer.C
 		buffer1 <- true
 	}()
-
+	is.bidLock.Lock()
 	is.auctionOver = <-buffer1
+	is.bidLock.Unlock()
 }
